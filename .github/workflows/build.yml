@@ -1,0 +1,29 @@
+
+name: Build & Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v5.1.0
+        with:
+          java-version: "21"
+          distribution: "temurin"
+      
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+          
+      - name: build with gradle
+        run: ./gradlew build
