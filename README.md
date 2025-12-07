@@ -37,3 +37,5 @@ theres no way rn to use multiple documentations tho (unless you manually merge t
 
 you can choose mc version used for icons from nerothe (see step 9).  
 so if you play mc 1.21.6 you'd do `--icons-version 1.21.6`, if you play 1.21.8, you'd do `--icons-version 1.21.8` (optional, 1.21.8 is the default)
+
+some items like short grass or any armor trim wont have an icon and even a title because `all items` advancement's criteria for them dont match their real item id
