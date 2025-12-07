@@ -45,8 +45,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    
+
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v5 
         with:
           name: dist
