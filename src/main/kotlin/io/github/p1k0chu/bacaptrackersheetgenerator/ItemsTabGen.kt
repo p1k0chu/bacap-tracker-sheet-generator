@@ -7,6 +7,7 @@ import kotlinx.serialization.json.*
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.nio.file.Path
+import kotlin.io.path.exists
 import kotlin.io.path.inputStream
 
 private const val ALL_ITEMS_ID = "blazeandcave:challenges/all_the_items"
@@ -28,11 +29,11 @@ fun XSSFWorkbook.generateItemsTab(packPath: Path, iconsVersion: String, transPat
 
     val transJson: JsonObject? = transPath?.let { Json.decodeFromStream(it.inputStream()) }
 
-    val allItemsStack = packPath.resolve(STACK_ALL_ITEMS_PATH).getAllCriteria()
-    val allBlocksStack = packPath.resolve(STACK_ALL_BLOCKS_PATH).getAllCriteria()
+    val allItemsStack = packPath.resolve(STACK_ALL_ITEMS_PATH).getAllCriteria() ?: return
+    val allBlocksStack = packPath.resolve(STACK_ALL_BLOCKS_PATH).getAllCriteria() ?: return
 
-    val allItems = packPath.resolve(ALL_ITEMS_PATH).getAllCriteria() - allItemsStack
-    val allBlocks = packPath.resolve(ALL_BLOCKS_PATH).getAllCriteria() - allBlocksStack
+    val allItems = (packPath.resolve(ALL_ITEMS_PATH).getAllCriteria() ?: return) - allItemsStack
+    val allBlocks = (packPath.resolve(ALL_BLOCKS_PATH).getAllCriteria() ?: return) - allBlocksStack
 
     var rowIndex = 1
 
@@ -108,7 +109,7 @@ private fun JsonObject.getBlockName(id: String): String {
 }
 
 @OptIn(ExperimentalSerializationApi::class)
-private fun Path.getAllCriteria(): Set<String> {
-    return Json.decodeFromStream<JsonObject>(inputStream())["criteria"]!!.jsonObject.keys
+private fun Path.getAllCriteria(): Set<String>? {
+    return if (exists()) Json.decodeFromStream<JsonObject>(inputStream())["criteria"]!!.jsonObject.keys else null
 }
 
