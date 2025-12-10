@@ -1,5 +1,6 @@
 package io.github.p1k0chu.bacaptrackersheetgenerator
 
+import io.github.p1k0chu.bacaptrackersheetgenerator.populateRow
 import io.github.p1k0chu.bacaptrackersheetgenerator.utils.removeSheet
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.*
@@ -19,12 +20,13 @@ private const val ALL_BLOCKS_PATH = "data/blazeandcave/advancement/challenges/al
 private const val STACK_ALL_BLOCKS_PATH = "data/blazeandcave/advancement/challenges/stack_all_the_blocks.json"
 
 @OptIn(ExperimentalSerializationApi::class)
-fun XSSFWorkbook.generateItemsTab(packPath: Path, iconsVersion: String, transPath: Path) {
+fun XSSFWorkbook.generateItemsTab(packPath: Path, iconsVersion: String, transPath: Path?) {
     removeSheet("Items-Blocks")
+
     val sheet = createSheet("Items-Blocks")
     fillHeader(sheet.createRow(0))
 
-    val transJson: JsonObject = Json.decodeFromStream(transPath.inputStream())
+    val transJson: JsonObject? = transPath?.let { Json.decodeFromStream(it.inputStream()) }
 
     val allItemsStack = packPath.resolve(STACK_ALL_ITEMS_PATH).getAllCriteria()
     val allBlocksStack = packPath.resolve(STACK_ALL_BLOCKS_PATH).getAllCriteria()
@@ -38,7 +40,7 @@ fun XSSFWorkbook.generateItemsTab(packPath: Path, iconsVersion: String, transPat
         populateRow(
             sheet.createRow(rowIndex++),
             iconsVersion,
-            transJson.getItemName(itemId),
+            transJson?.getItemName(itemId) ?: "",
             1,
             itemId,
             ALL_ITEMS_ID
@@ -48,7 +50,7 @@ fun XSSFWorkbook.generateItemsTab(packPath: Path, iconsVersion: String, transPat
         populateRow(
             sheet.createRow(rowIndex++),
             iconsVersion,
-            transJson.getItemName(itemId),
+            transJson?.getItemName(itemId) ?: "",
             64,
             itemId,
             STACK_ALL_ITEMS_ID
@@ -58,7 +60,7 @@ fun XSSFWorkbook.generateItemsTab(packPath: Path, iconsVersion: String, transPat
         populateRow(
             sheet.createRow(rowIndex++),
             iconsVersion,
-            transJson.getBlockName(blockId),
+            transJson?.getBlockName(blockId) ?: "",
             1,
             blockId,
             ALL_BLOCKS_ID
@@ -68,7 +70,7 @@ fun XSSFWorkbook.generateItemsTab(packPath: Path, iconsVersion: String, transPat
         populateRow(
             sheet.createRow(rowIndex++),
             iconsVersion,
-            transJson.getBlockName(blockId),
+            transJson?.getBlockName(blockId) ?: "",
             64,
             blockId,
             STACK_ALL_BLOCKS_ID

@@ -21,22 +21,22 @@ class Main : CliktCommand("bacap-tracker-sheet-generator") {
         mustBeReadable = true
     ).required()
 
-    private val docs: Path by option("-d", "--docs", help = "the documentation sheet (xlsx file)").path(
+    private val docs: Path? by option("-d", "--docs", help = "the documentation sheet (xlsx file)").path(
         mustExist = true,
         canBeDir = false,
         mustBeReadable = true
-    ).required()
+    )
 
     private val iconsVersion: String by option(
         "--icons-version",
         help = "minecraft version (only for icons from nerothe)\u0085default: 1.21.8"
     ).default("1.21.8")
 
-    private val transPath: Path by option("-t", "--trans", help = "the path to translation file extracted from client.jar (for item names)").path(
+    private val transPath: Path? by option("-t", "--trans", help = "the path to translation file extracted from client.jar (for item names)").path(
         mustExist = true,
         canBeDir = false,
         mustBeReadable = true
-    ).required()
+    )
 
     private val output: Path by option("-o", "--output", help = "output sheet (xlsx)")
         .path(canBeDir = false)
@@ -47,7 +47,7 @@ class Main : CliktCommand("bacap-tracker-sheet-generator") {
     }
 
     override fun run() {
-        val docsWorkbook: Workbook = WorkbookFactory.create(docs.toFile())
+        val docsWorkbook: Workbook? = docs?.let { WorkbookFactory.create(it.toFile()) }
         val workbook = XSSFWorkbook()
 
         workbook.generateAdvancementsTab(docsWorkbook, datapack, iconsVersion)

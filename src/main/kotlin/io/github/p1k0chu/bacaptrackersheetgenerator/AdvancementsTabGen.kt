@@ -16,7 +16,7 @@ import java.nio.file.Path
 import kotlin.io.path.*
 
 @OptIn(ExperimentalSerializationApi::class)
-fun XSSFWorkbook.generateAdvancementsTab(docsWorkbook: Workbook, packPath: Path, iconsVersion: String) {
+fun XSSFWorkbook.generateAdvancementsTab(docsWorkbook: Workbook?, packPath: Path, iconsVersion: String) {
     removeSheet("Advancements")
 
     val advancementsWorksheet = createSheet("Advancements")
@@ -31,7 +31,7 @@ fun XSSFWorkbook.generateAdvancementsTab(docsWorkbook: Workbook, packPath: Path,
 
         for (advTab in advs.listDirectoryEntries()) {
             val tabName = getTabName(advTab.name)
-            val docSheet: Sheet? = docsWorkbook.getSheet(tabName)
+            val docSheet: Sheet? = docsWorkbook?.getSheet(tabName)
             val tabStyle: XSSFCellStyle? =
                 docSheet?.getRow(1)
                     ?.getCell(1)
