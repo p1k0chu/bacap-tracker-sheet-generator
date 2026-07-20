@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version("2.2.21")
+    kotlin("jvm") version("2.4.10")
 
     application
 }
@@ -22,5 +22,11 @@ dependencies {
     implementation(libs.bundles.poi)
     implementation(libs.clikt)
     implementation(libs.serialization)
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
 }
 
